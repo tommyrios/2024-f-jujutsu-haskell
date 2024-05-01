@@ -38,5 +38,50 @@ esInvencible hechiceros = any esEspecial hechiceros
 esEspecial :: Hechicero -> Bool
 esEspecial = (==0).grado
 
---func :: a -> (b -> (c -> (d -> (e))))
+esPrestigioso :: Hechicero -> Bool
+esPrestigioso hechicero = elem (clan hechicero) clanesPrestigiosos
+
+esFavorito :: [Hechicero] -> Bool
+esFavorito hechiceros = all esPrestigioso hechiceros
+
+esExperto :: Hechicero -> Bool
+esExperto = (>1).antiguedad
+
+sonExpertos :: [Hechicero] -> [Hechicero]
+sonExpertos hechiceros = filter esExperto hechiceros
+
+subirGrado :: Hechicero -> Hechicero
+subirGrado hechicero
+    | grado hechicero > 0 = hechicero { grado = grado hechicero - 1 }
+    | otherwise = hechicero { grado = 0 }
+
+hacerFrente :: [Hechicero] -> Bool
+hacerFrente hechiceros = esInvencible hechiceros || estaPreparado hechiceros
+
+powerUp :: [Hechicero] -> [Hechicero]
+powerUp = map subirGrado
+
+nivelTryhard :: Hechicero -> Number
+nivelTryhard = (/1).(+1).grado
+
+misionDificil :: Hechicero -> Hechicero -> Hechicero
+misionDificil hechi1 hechi2 
+    | nivelTryhard hechi1 >= nivelTryhard hechi2 = hechi1
+    | otherwise = hechi2
+
+nivelBurocratico :: Hechicero -> Number
+nivelBurocratico = length.clan
+
+mayorLetra :: String -> Char
+mayorLetra = maximum
+
+nivelIntimidante :: Hechicero -> Hechicero -> Hechicero
+nivelIntimidante hechi1 hechi2
+    | mayorLetra (clan hechi1) >= mayorLetra (clan hechi2) = hechi1
+    | otherwise = hechi2
+
+nivelSigilo :: Hechicero -> Number
+nivelSigilo = (*6).antiguedad
+
+
 
